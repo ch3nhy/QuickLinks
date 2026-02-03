@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人导航站 - 极简工具箱</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #333333;
+            --border: #e0e0e0;
+            --accent: #000000;
+            --hover-bg: #f8f8f8;
+            --gray: #888888;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #121212;
+                --text: #d4d4d4;
+                --border: #333333;
+                --accent: #ffffff;
+                --hover-bg: #1e1e1e;
+            }
+        }
+
+        body {
+            font-family: -apple-system, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* 表格布局 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        tr {
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:hover {
+            background-color: var(--hover-bg);
+        }
+
+        td {
+            padding: 18px 10px;
+            vertical-align: top;
+        }
+
+        /* 分类列 */
+        .col-category {
+            width: 110px;
+            font-weight: bold;
+            color: var(--accent);
+            border-right: 1px solid var(--border);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* 链接容器 */
+        .link-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 24px;
+            padding-left: 15px;
+        }
+
+        a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-align: center;
+        }
+
+        /* 手机端适配 */
+        @media (max-width: 650px) {
+            .col-category {
+                width: 100%;
+                display: block;
+                border-right: none;
+                padding: 15px 10px 5px 10px;
+                font-size: 0.85rem;
+                opacity: 0.7;
+            }
+            td {
+                display: block;
+                width: 100%;
+                padding: 10px;
+            }
+            .link-container {
+                padding-left: 0;
+                gap: 10px 15px;
+            }
+            header {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>MY NAVIGATOR</h1>
+        <span class="subtitle">纯文字极简工具索引</span>
+    </header>
+
+    <table>
+        <tbody id="nav-body">
+            <!-- JS 自动填充 -->
+        </tbody>
+    </table>
+
+    <footer>
+        <p>&copy; <span id="year"></span> 工具集成 · GitHub + Cloudflare</p>
+    </footer>
+</div>
+
+<script>
+    /**
+     * 在这里管理你的导航数据
+     * 格式: { category: "分类名", links: [ {name: "显示名", url: "链接"}, ... ] }
+     */
+    const NAV_DATA = [
+        {
+            category: "网络 & 身份",
+            links: [
+                { name: "IP纯净度检测", url: "https://ipjiance.com/" },
+                { name: "IPPure检测", url: "https://ippure.com/" },
+                { name: "Whois域名查询", url: "https://whoiscx.com/" },
+                { name: "美国身份生成", url: "https://www.meiguodizhi.com/" },
+                { name: "XChrome指纹浏览器", url: "https://github.com/chanawudi/XChrome?tab=readme-ov-file" },
+                { name: "海外住宅代理", url: "https://www.miyaip.com/" },
+                { name: "UUID生成", url: "https://www.uuidgenerator.net/" }
+            ]
+        },
+        {
+            category: "机场 & 代理",
+            links: [
+                { name: "Clash Mi 下载", url: "https://clashmi.app/download" },
+                { name: "GitHub 机场搭建", url: "https://github.com/weiwentao518/ladder?tab=readme-ov-file" }
+            ]
+        },
+        {
+            category: "临时邮箱",
+            links: [
+                { name: "一次性邮箱 (IO)", url: "https://temp-mail.io/zh" },
+                { name: "临时邮件服务 (CX)", url: "https://mail.cx/zh/" },
+                { name: "自定义一次邮", url: "https://fviainboxes.com/" }
+            ]
+        },
+        {
+            category: "图片 & 设计",
+            links: [
+                { name: "一键抠图", url: "https://remove.photos/zh-cn/" },
+                { name: "PhotoRoom去背景", url: "https://www.photoroom.com/zh" },
+                { name: "AI照片增强", url: "https://aienhancer.ai/zh" },
+                { name: "图片批量编辑", url: "https://www.iloveimg.com/zh-cn" },
+                { name: "Photoshop网页版", url: "https://photoshop.adobe.com/" },
+                { name: "Photoshop CS6", url: "http://pan.baidu.com/s/1i3hHAXv" },
+                { name: "巨量去水印", url: "https://kt.jishuge.cn/" },
+                { name: "颜色吸管", url: "https://photokit.com/colors/eyedropper/?lang=zh" },
+                { name: "印章在线生成", url: "https://onepage.czl.net/tools/seal_generation/" }
+            ]
+        },
+        {
+            category: "视频 & AI",
+            links: [
+                { name: "声音克隆", url: "https://anyvoice.net/zh" },
+                { name: "AI视频去背景", url: "https://www.vidio.ai/zh-CN/tools/video-background-remover" },
+                { name: "VEED视频生成", url: "https://www.veed.io/tools/ai-video/text-to-video" },
+                { name: "Phot AI工具", url: "https://www.phot.ai/tools" }
+            ]
+        },
+        {
+            category: "效率 & 资源",
+            links: [
+                { name: "效率工具合集", url: "https://blog.luckly-mjw.cn/tool-show/index.html" },
+                { name: "在线工具箱", url: "https://tool.lu/tool" },
+                { name: "文件在线压缩", url: "https://freecompress.com/zh-cn" },
+                { name: "繁简转换", url: "https://jf.homefont.cn/" },
+                { name: "免费网页模板", url: "https://www.mobanwang.com/" },
+                { name: "深色模式插件", url: "https://darkpages.net/" },
+                { name: "医学百科", url: "https://www.yixue.com/" }
+            ]
+        }
+    ];
+
+    function render() {
+        const tbody = document.getElementById('nav-body');
+        tbody.innerHTML = NAV_DATA.map(item => `
+            <tr>
+                <td class="col-category">${item.category}</td>
+                <td>
+                    <div class="link-container">
+                        ${item.links.map(link => `
+                            <a href="${link.url}" target="_blank" rel="noopener">${link.name}</a>
+                        `).join('')}
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+        document.getElementById('year').innerText = new Date().getFullYear();
+    }
+
+    render();
+</script>
+
+</body>
+</html>
